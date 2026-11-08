@@ -1,0 +1,34 @@
+# Original Olist CSVs are downloaded from Kaggle, not redistributed in this repo.
+data/raw/
+*.csv
+
+# Local SQL backups/data and credentials
+*.bak
+*.mdf
+*.ldf
+*.trn
+*.dacpac
+*.env
+.env.*
+!*.env.example
+
+# Transient Office / Power BI / OS files
+~$*
+*.tmp
+*.temp
+*.lock
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Generated backups; keep the final PBIX checked in under powerbi/.
+*_backup.pbix
+*.pbix.bak
+*.pbit.bak
+
+# Python/editor caches, if used locally
+__pycache__/
+*.pyc
+.vscode/
+.idea/
