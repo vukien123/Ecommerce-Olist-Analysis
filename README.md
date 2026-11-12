@@ -1,91 +1,91 @@
-# Olist E-commerce | Order & Delivery Performance Analysis
+**Language:** English | [Tiếng Việt](README_VI.md)
 
-**SQL Server · Power BI · Data Quality · Business Analysis**  
-*A portfolio case study using historical Brazilian e-commerce data.*
+# Olist E-commerce Order and Delivery Performance Analysis
 
-## Project overview (Tổng quan dự án)
+**SQL Server · Power BI · Data Quality · Business Analysis**
 
-This project analyzes orders, delivered item value, and delivery reliability using the public **Olist Brazilian E-Commerce Dataset**. The business stakeholder is a **hypothetical e-commerce operations manager**. The goal is to turn transactional records into actionable insights—not to predict future results or claim causation.
+A portfolio case study using historical Brazilian e-commerce data.
 
-The workflow covers **data profiling → data cleaning → SQL analysis → KPI validation → Power BI reporting → operational recommendations**.
+## Project overview
 
-**Scope:** 99,441 orders, 112,650 order-item rows, and 99,441 customer records. The order data spans **September 2016–October 2018**. Monthly trend charts focus on **January 2017–August 2018** to avoid sparsely populated boundary months; KPI cards report the full historical period unless a user-applied filter is explicitly indicated.
+This project uses the public Olist Brazilian E-Commerce Dataset to analyze order volume, the value of items in delivered orders, and delivery reliability. It is written for a hypothetical e-commerce operations manager. The analysis describes historical patterns and identifies areas for follow-up. Forecasting and causal analysis are outside its scope.
 
-## Dashboard previews (Ảnh báo cáo)
+The workflow covers data profiling, data cleaning, SQL analysis, KPI validation, Power BI reporting, and operational recommendations.
 
-### Page 1 — Order Overview (Tổng quan đơn hàng)
+**Scope:** 99,441 orders, 112,650 order-item rows, and 99,441 customer records. The order data spans **September 2016–October 2018**. Monthly trend charts focus on **January 2017–August 2018** to exclude months with sparse data at the start and end of the period. KPI cards cover the full historical period unless the report indicates a filter applied by the user.
+
+## Dashboard previews
+
+### Page 1 — Order Overview
 
 ![Olist order overview dashboard](images/dashboard_overview.png)
 
-Tracks the total number of orders, value of items in delivered orders, and late-delivery rate, along with monthly trends.
+Shows total orders, delivered item value, the late-delivery rate, and monthly trends.
 
-### Page 2 — Delivery Performance (Hiệu quả giao hàng)
+### Page 2 — Delivery Performance
 
 ![Olist delivery performance dashboard](images/dashboard_delivery.png)
 
-Compares late-delivery **rate** and **count** across all 27 Brazilian customer states. These complementary metrics help distinguish high-risk proportions from high-volume operational impact.
+Compares late-delivery **rates** and **counts** across all 27 Brazilian customer-state codes in the dataset. Rates show where a larger share of orders arrived late. Counts show where more orders were affected.
 
-> **Reading note:** Default KPI cards cover the full dataset. Monthly trend visuals use the January 2017–August 2018 focus window, while the state comparisons use the full historical period. Do not interpret a filtered subset as an all-time result.
+> **Reading note:** The KPI cards cover the full dataset by default. Monthly trends use the January 2017–August 2018 focus window. State comparisons cover the full historical period. Read filtered results within their selected scope.
 
-## Business questions (Câu hỏi kinh doanh)
+## Business questions
 
 1. How did **order volume** change by purchase month?
 2. How did **delivered item value** change by purchase month?
 3. What share of eligible delivered orders arrived **after the estimated delivery date**?
-4. Which customer states had the highest **late-delivery rates**, and which contributed the most **late orders**?
+4. Which customer states had the highest **late-delivery rates**? Which had the most **late orders**?
 
-## Core KPIs (Các chỉ số chính)
+## Core KPIs
 
 | KPI | Historical result | Definition |
-|---|---:|---|
-| Total Orders | **99,441** | Distinct `order_id`, all order statuses |
-| Delivered Item Value | **BRL 13,221,498.11** | Sum of cleaned item `price` for `delivered` orders; freight excluded |
-| Eligible Delivered Orders | **96,470** | Delivered orders with both actual and estimated delivery dates |
-| Late Orders | **6,534** | Eligible orders received on a later **calendar date** than estimated |
+| --- | ---: | --- |
+| Total Orders | **99,441** | Count of distinct `order_id` values across all order statuses |
+| Delivered Item Value | **BRL 13,221,498.11** | Sum of cleaned item `price` for orders with status `delivered`, excluding freight |
+| Eligible Delivered Orders | **96,470** | Delivered orders with both an actual and an estimated delivery date |
+| Late Orders | **6,534** | Eligible orders that arrived on a **calendar date** later than the estimated delivery date |
 | Late Delivery Rate | **6.77%** | Late Orders ÷ Eligible Delivered Orders |
 
-**Important:** Delivered Item Value is **item value**, not verified accounting revenue, cash receipts, or profit. Late delivery is calculated by comparing **dates**, not hours within the same date.
+**Interpretation:** Delivered Item Value measures the value of items. Verified accounting revenue, cash receipts, and profit are outside this KPI's scope. The late-delivery calculation compares calendar dates, so differences in delivery time within the same date do not count as late.
 
-## Selected findings (Nhận định nổi bật)
+## Selected findings
 
-- **November 2017** had the highest monthly order volume: **7,544 orders**. Delivered item value that month was **BRL 987,765.37**.
-- **AL** had the highest late-delivery rate at **21.41%** (85 late orders / 397 eligible). Its smaller sample size should be considered when prioritizing operational action.
-- **SP** had the largest absolute number of late orders, **1,820**, but a relatively low late-delivery rate of **4.49%** (40,494 eligible).
-- **RJ** had **1,495** late orders and a **12.11%** rate (12,350 eligible), making it a meaningful region for further investigation.
-- **RJ, BA, and CE** are reasonable priorities for follow-up because their late-delivery rates exceeded the overall **6.77%** while also showing notable delayed-order volumes. This is an **investigation priority**, not a proven explanation for delays.
+- **November 2017** had the most orders of any month, with **7,544 orders** and **BRL 987,765.37** in delivered item value.
+- **AL** had the highest late-delivery rate at **21.41%** (85 late orders out of 397 eligible orders). Consider the smaller sample when prioritizing follow-up.
+- **SP** had the most late orders (**1,820**) and a relatively low late-delivery rate of **4.49%** (40,494 eligible orders).
+- **RJ** had **1,495** late orders and a late-delivery rate of **12.11%** (12,350 eligible orders), making it a candidate for further investigation.
+- **RJ, BA, and CE** are candidates for follow-up because their late-delivery rates were above the overall **6.77%** and they had notable volumes of late orders. These comparisons identify where to investigate. The causes of the delays remain unverified.
 
-For supporting calculations, caveats, and recommendations, see [`docs/insights_recommendations.md`](docs/insights_recommendations.md).
+See [`docs/insights_recommendations.md`](docs/insights_recommendations.md) for supporting calculations, caveats, and recommendations.
 
-## Data cleaning and quality (Làm sạch và chất lượng dữ liệu)
+## Data cleaning and quality
 
-The analysis identified and documented the following:
+- **Monetary values during import:** In this project's SQL Server import, `price` and `freight_value` were **100×** the amounts in the original CSV. The `dbo.v_olist_order_items_clean` view corrects the imported values while leaving the source CSV intact. Row counts and aggregate totals were independently checked against the source CSV. **Apply this correction only when the import has the documented scaling problem.**
+- **Missing order-item rows:** 775 orders have no matching order-item record. The orders dataset retains them. Use distinct order IDs from the orders table for the full order count, since counting joined rows can give a misleading result.
+- **Missing delivery dates:** 8 `delivered` orders lack an actual delivery date. They remain in the data and are excluded from the late-delivery denominator.
+- **Timeline anomalies:** 23 orders have an actual customer delivery timestamp earlier than the carrier handoff timestamp. The analysis documents these anomalies and keeps the recorded timestamps.
 
-- **Monetary import scaling:** In the project's SQL Server import, `price` and `freight_value` were **100×** the original CSV amounts. A dedicated SQL view, `dbo.v_olist_order_items_clean`, corrects the locally imported values **without changing the source CSV**. Totals were reconciled independently with the source CSV at the row-count and aggregate level. **This correction is specific to that import; it must not be applied blindly to correctly imported data.**
-- **Missing item rows:** 775 orders have no corresponding order-item record. They are retained in the orders dataset; full order counts must not be computed by naively counting joined rows.
-- **Missing delivery dates:** Eight `delivered` orders lack an actual delivery date and are excluded from the late-delivery denominator, but not deleted from the data.
-- **Timeline anomalies:** 23 orders have an actual-customer-delivery timestamp earlier than their carrier-handoff timestamp. These were documented, not silently rewritten.
+[`docs/data_quality_report.md`](docs/data_quality_report.md) and [`docs/validation_report.md`](docs/validation_report.md) document the aggregate checks and the reconciliation between SQL Server and Power BI. Reconciliation was performed at the aggregate level.
 
-Aggregate data checks and SQL–Power BI reconciliation are recorded in [`docs/data_quality_report.md`](docs/data_quality_report.md) and [`docs/validation_report.md`](docs/validation_report.md). The project does **not** claim that every source record was individually reconciled.
+## Data model and tools
 
-## Data model and tools (Mô hình dữ liệu và công cụ)
-
-**Data tables:**
-
-| Object | Grain (Mức chi tiết) | Join |
-|---|---|---|
+| Object | Grain | Join keys |
+| --- | --- | --- |
 | `olist_orders` | One row per order | `order_id`, `customer_id` |
 | `olist_customers` | One customer record per order in this dataset | `customer_id` |
 | `v_olist_order_items_clean` | One item line per order-item ID | `order_id` |
 
-`olist_orders` → cleaned items is **one-to-many**; customers ↔ orders is **one-to-one** in this dataset. `customer_id` is an order-associated customer key, **not** a reliable repeat-buyer ID; `customer_unique_id` would be needed for that analysis.
+In this dataset, `olist_orders` has a **one-to-many** relationship with the cleaned items, and customers and orders have a **one-to-one** relationship. `customer_id` identifies the customer record associated with an order. Repeat-buyer analysis requires `customer_unique_id`.
 
 **Tools:** Microsoft SQL Server 2022 Express, SQL Server Management Studio (SSMS), Power BI Desktop (Import mode), SQL, DAX, and Markdown.
 
-## Repository contents (Cấu trúc thư mục)
+## Repository contents
 
 ```text
 Ecommerce-Olist-Analysis/
 ├── README.md
+├── README_VI.md
 ├── .gitignore
 ├── docs/
 │   ├── project_brief.md
@@ -103,37 +103,36 @@ Ecommerce-Olist-Analysis/
 │   ├── dashboard_overview.png
 │   └── dashboard_delivery.png
 └── data/
-    └── raw/           # local only; CSVs are intentionally not uploaded
+    └── raw/           # local only; source CSVs are kept outside the repository
 ```
 
-## How to explore the project (Cách xem và chạy)
+## How to explore the project
 
-**To view the completed report:** Open [`powerbi/olist_dashboard.pbix`](powerbi/olist_dashboard.pbix) using Power BI Desktop. The file was created in **Import mode**; a later refresh may require an accessible SQL Server source and appropriate credentials.
+**View the report:** Open [`powerbi/olist_dashboard.pbix`](powerbi/olist_dashboard.pbix) in Power BI Desktop. The file uses **Import mode**. Refreshing it may require access to the SQL Server source and the appropriate credentials.
 
-**To inspect the analysis:** Read [`sql/olist_analysis.sql`](sql/olist_analysis.sql) and the documentation in [`docs/`](docs/). The SQL script assumes the `olist_ecommerce` database and its three source tables have already been created/imported; **it is not a complete one-click database setup script**.
+**Inspect the analysis:** Read [`sql/olist_analysis.sql`](sql/olist_analysis.sql) and the documentation in [`docs/`](docs/). Create the `olist_ecommerce` database and import the three source tables before running the script. Database setup and CSV import are separate steps.
 
-**To reproduce from original data:**
+**Reproduce the analysis from the source data:**
 
-1. Download the three source CSVs from the original [Olist dataset on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce): orders, order items, and customers.
-2. Create a local `olist_ecommerce` SQL Server database and import those CSVs into `dbo.olist_orders`, `dbo.olist_order_items`, and `dbo.olist_customers`, with suitable column types.
-3. **Check monetary values against the source CSV before running the cleaning view.** The included view divides by 100 because of the documented scaling problem in this project's original import. Adjust the import process instead if your values are already correct.
-4. Run and inspect the relevant sections of `sql/olist_analysis.sql`; cross-check against `docs/validation_report.md`.
-5. Open the PBIX for the designed dashboard. Refreshing against a separate SQL Server instance may require updating connection settings and revalidating results.
+1. Download the orders, order items, and customers CSVs from the [Olist dataset on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
+2. Create a local `olist_ecommerce` SQL Server database. Import the CSVs into `dbo.olist_orders`, `dbo.olist_order_items`, and `dbo.olist_customers` using suitable column types.
+3. **Check monetary values against the source CSV before running the cleaning view.** The included view divides imported amounts by 100 to correct the documented scaling issue. If your imported amounts already match the CSV, keep those values and adjust the import workflow to skip the correction.
+4. Run the relevant sections of [`sql/olist_analysis.sql`](sql/olist_analysis.sql) and check the results against [`docs/validation_report.md`](docs/validation_report.md).
+5. Open the PBIX file to view the dashboard. Refreshing it against a different SQL Server instance may require updating the connection settings and revalidating the results.
 
-## Limitations (Giới hạn phân tích)
+## Limitations
 
-- Historical data from 2016–2018 does not describe current Olist operations.
-- There is no verified causal model for delivery delays; state-level comparisons identify areas to **investigate**, not proven root causes.
-- The project does not analyze profit, payment settlement, product reviews, or predictive fraud models.
-- Aggregate reconciliation and recorded KPI checks do not imply exhaustive record-level or independent Power BI interaction testing.
+- The 2016–2018 data describes historical activity. Current Olist operations are outside the scope of the analysis.
+- State-level comparisons identify areas for follow-up. Establishing the causes of delivery delays would require separate causal analysis.
+- Profit, payment settlement, product reviews, and predictive fraud modeling are outside the scope.
+- Validation covers aggregate reconciliation and the documented KPI checks. Exhaustive record-level validation and independent testing of Power BI interactions are outside the scope of these checks.
 
-## Source and attribution (Nguồn dữ liệu)
+## Source and attribution
 
-**Olist — Brazilian E-Commerce Public Dataset**, published on Kaggle:  
-https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+[Olist — Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), published on Kaggle.
 
-Source CSVs are **not redistributed in this GitHub repository**. Please review the dataset's licensing and terms on Kaggle before reuse.
+The source CSVs are kept outside this repository. Review the dataset's license and terms on Kaggle before reuse.
 
 ---
 
-*Portfolio project | SQL analysis, quality assurance, business interpretation, and Power BI reporting.*
+*Portfolio project covering SQL analysis, data quality checks, business interpretation, and Power BI reporting.*
